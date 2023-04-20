@@ -37,7 +37,7 @@ public class PlayerJumpState : State
             {
                 _player.MovementStateMachine.ChangeState(_player.MoveState);
             }
-            else
+            else if (_player.Rb.velocity.y <= 0)
             {
                 _player.MovementStateMachine.ChangeState(_player.IdleState);
             }
@@ -45,15 +45,15 @@ public class PlayerJumpState : State
         else
         {
             _player.MoveHorizontally();
-        }
 
-        if(IsPlayerFalling())
-        {
-            _player.PlayAnimation("falling");
-        }
-        else
-        {
-            _player.PlayAnimation("jump_continue");
+            if (IsPlayerFalling())
+            {
+                _player.PlayAnimation("falling");
+            }
+            else
+            {
+                _player.PlayAnimation("jump_continue");
+            }
         }
     }
 
