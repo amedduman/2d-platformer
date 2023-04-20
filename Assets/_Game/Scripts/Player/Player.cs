@@ -61,4 +61,15 @@ public class Player : MonoBehaviour
         var original = Body.transform.rotation.eulerAngles;
         Body.localEulerAngles = new Vector3(original.x, degree, original.z);
     }
+
+    public bool IsMovingHorizontally()
+    {
+        return Mathf.Approximately(0, Rb.velocity.magnitude);
+    }
+
+    public void PlayAnimation(string stateName)
+    {
+        MyAnimator.Play(Animator.StringToHash(stateName));
+    }
+
 }

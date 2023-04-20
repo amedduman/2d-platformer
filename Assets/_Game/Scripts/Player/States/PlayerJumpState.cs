@@ -14,9 +14,14 @@ public class PlayerJumpState : State
     public override void Enter()
     {
         if (GroundCheck())
+        {
+            _player.PlayAnimation("jump_start");
             Jump();
+        }
         else
+        {
             _player.MovementStateMachine.ChangeState(_player.MoveState);
+        }
     }
 
     public override void Tick()
@@ -27,9 +32,29 @@ public class PlayerJumpState : State
     public override void FixedTick()
     {
         if (GroundCheck())
-            _player.MovementStateMachine.ChangeState(_player.MoveState);
+        {
+            if(_player.IsMovingHorizontally())
+            {
+                _player.MovementStateMachine.ChangeState(_player.MoveState);
+            }
+            else
+            {
+                _player.MovementStateMachine.ChangeState(_player.IdleState);
+            }
+        }    
         else
+        {
             _player.MoveHorizontally();
+        }
+
+        if(IsPlayerFalling())
+        {
+            _player.PlayAnimation("falling");
+        }
+        else
+        {
+            _player.PlayAnimation("jump_continue");
+        }
     }
 
     void Jump()
@@ -46,5 +71,10 @@ public class PlayerJumpState : State
         }
 
         return false;
+    }
+
+    bool IsPlayerFalling()
+    {
+        return _player.Rb.velocity.y < 0;
     }
 }

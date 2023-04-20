@@ -20,5 +20,8 @@ public class PlayerIdleState : State
     {
         if (Mathf.Approximately(0, _player.MoveInput.x) == false)
             _player.MovementStateMachine.ChangeState(_player.MoveState);
+
+        if (_player.JumpInput)
+            _player.MovementStateMachine.ChangeState(_player.JumpState);
     }
 }

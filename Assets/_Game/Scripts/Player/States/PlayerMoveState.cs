@@ -23,7 +23,7 @@ public class PlayerMoveState : State
             _player.MovementStateMachine.ChangeState(_player.JumpState);
         }
 
-        if(Mathf.Approximately(0, _player.Rb.velocity.magnitude))
+        if(_player.IsMovingHorizontally())
             _player.MovementStateMachine.ChangeState(_player.IdleState);
 
         _player.ChangeBodyRotataionAccordingToMovementDirection();
