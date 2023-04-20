@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useToolboxHierarchy: 1
   drawHorizontalLines: 1
-  showSelectionsCount: 0
+  showSelectionsCount: 1
   rowDataTypes: 01000000
   useToolboxFolders: 1
   largeIconScale: 0.8
