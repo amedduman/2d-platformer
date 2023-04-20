@@ -11,8 +11,30 @@ public class PlayerMoveState : State
         _player = player;
     }
 
+    public override void Enter()
+    {
+        _player.MyAnimator.Play("Walking");
+    }
+
+    public override void Tick()
+    {
+        if (_player.JumpInput)
+        {
+            _player.MovementStateMachine.ChangeState(_player.JumpState);
+        }
+
+        if(Mathf.Approximately(0, _player.Rb.velocity.magnitude))
+            _player.MovementStateMachine.ChangeState(_player.IdleState);
+
+        _player.ChangeBodyRotataionAccordingToMovementDirection();
+    }
+
     public override void FixedTick()
     {
-        _player.Rb.velocity = new Vector2(_player.MoveInputVec.x * _player.MovementSpeed, _player.Rb.velocity.y);
+        _player.MoveHorizontally();
     }
+
+    
+
+    
 }

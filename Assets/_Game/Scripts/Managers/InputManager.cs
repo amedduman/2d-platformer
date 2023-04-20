@@ -18,4 +18,9 @@ public class InputManager : MonoBehaviour
         inputVector.Normalize();
         return inputVector;
     }
+
+    public bool IsJumpButtonPressed()
+    {
+        return _playerInput.Gameplay.Jump.IsPressed();
+    }
 }
