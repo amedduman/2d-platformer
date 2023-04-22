@@ -24,11 +24,6 @@ public class PlayerJumpState : State
         }
     }
 
-    public override void Tick()
-    {
-        _player.ChangeBodyRotataionAccordingToMovementDirection();
-    }
-
     public override void FixedTick()
     {
         if (GroundCheck())

@@ -27,8 +27,6 @@ public class PlayerMoveState : State
         {
             _player.MovementStateMachine.ChangeState(_player.IdleState);
         }
-
-        _player.ChangeBodyRotataionAccordingToMovementDirection();
     }
 
     public override void FixedTick()
