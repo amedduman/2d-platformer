@@ -11,13 +11,19 @@ public class PlayerWallSlideState : State
         _player = player;
     }
 
-    bool CheckWall()
+    public override void Enter()
     {
-        if(Physics2D.Raycast(_player.WallCheckRayOrigin.position, _player.transform.right, _player.WallCheckRayLegth, _player.WallLayer))
-        {
-            return true;
-        }
+    }
 
-        return false;
+    public override void Tick()
+    {
+        if(_player.GroundCheck())
+        {
+            _player.MovementStateMachine.ChangeState(_player.IdleState);
+        }
+        else
+        {
+            _player.Rb.velocity = new Vector2(_player.Rb.velocity.x, -2);
+        }
     }
 }

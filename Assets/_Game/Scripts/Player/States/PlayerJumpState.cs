@@ -13,7 +13,7 @@ public class PlayerJumpState : State
 
     public override void Enter()
     {
-        if (GroundCheck())
+        if (_player.GroundCheck())
         {
             _player.PlayAnimation("jump_start");
             Jump();
@@ -24,9 +24,23 @@ public class PlayerJumpState : State
         }
     }
 
+    public override void Tick()
+    {
+        if(_player.GroundCheck() == false)
+        {
+            if(_player.CheckWall())
+            {
+                if(_player.Rb.velocity.y < 0)
+                {
+                    _player.MovementStateMachine.ChangeState(_player.WallSlideState);
+                }
+            }
+        }
+    }
+
     public override void FixedTick()
     {
-        if (GroundCheck())
+        if (_player.GroundCheck())
         {
             if(_player.IsMovingHorizontally())
             {
@@ -57,16 +71,7 @@ public class PlayerJumpState : State
         _player.Rb.velocity = new Vector2(_player.Rb.velocity.x, _player.JumpSpeed);
     }
 
-    bool GroundCheck()
-    {
-        if(Physics2D.OverlapBox(_player.transform.position,
-            new Vector2(.3f, .3f), 0, _player.JumpableLayers) != null)
-        {
-            return true;
-        }
-
-        return false;
-    }
+    
 
     bool IsPlayerFalling()
     {

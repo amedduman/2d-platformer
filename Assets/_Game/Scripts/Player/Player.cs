@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     public PlayerMoveState MoveState;
     public PlayerJumpState JumpState;
     public PlayerIdleState IdleState;
+    public PlayerWallSlideState WallSlideState;
 
     InputManager _inputManager;
     
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour
         MoveState = new PlayerMoveState(this);
         JumpState = new PlayerJumpState(this);
         IdleState = new PlayerIdleState(this);
+        WallSlideState = new PlayerWallSlideState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -76,6 +78,27 @@ public class Player : MonoBehaviour
     public void PlayAnimation(string stateName)
     {
         MyAnimator.Play(Animator.StringToHash(stateName));
+    }
+
+    public bool GroundCheck()
+    {
+        if (Physics2D.OverlapBox(transform.position,
+            new Vector2(.3f, .3f), 0, JumpableLayers) != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CheckWall()
+    {
+        if (Physics2D.Raycast(WallCheckRayOrigin.position, transform.right, WallCheckRayLegth, WallLayer))
+        {
+            return true;
+        }
+
+        return false;
     }
 
 }
