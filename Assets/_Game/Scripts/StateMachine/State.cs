@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public abstract class State
 {
     // automatically gets called in the State machine. Allows you to delay flow if desired

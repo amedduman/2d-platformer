@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJumpState : State
+public class PlayerJumpState : PlayerInAirState
 {
     Player _player;
 
-    public PlayerJumpState(Player player)
+    public PlayerJumpState(Player player) : base(player)
     {
         _player = player;
     }
@@ -26,16 +26,7 @@ public class PlayerJumpState : State
 
     public override void Tick()
     {
-        if(_player.GroundCheck() == false)
-        {
-            if(_player.CheckWall())
-            {
-                if(_player.Rb.velocity.y < 0)
-                {
-                    _player.MovementStateMachine.ChangeState(_player.WallSlideState);
-                }
-            }
-        }
+        base.Tick();
     }
 
     public override void FixedTick()

@@ -353,7 +353,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5.625
+  orthographic size: 5.5347223
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -12238,12 +12238,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MyAnimator>k__BackingField: {fileID: 1827500550}
   <MovementSpeed>k__BackingField: 10
-  <JumpSpeed>k__BackingField: 30
+  <JumpSpeed>k__BackingField: 16
   <JumpableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
   <WallCheckRayOrigin>k__BackingField: {fileID: 816242941}
-  <WallCheckRayLegth>k__BackingField: 0.6
+  <WallCheckRayLegth>k__BackingField: 0.4
   <WallLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 64

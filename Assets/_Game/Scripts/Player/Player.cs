@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public PlayerJumpState JumpState;
     public PlayerIdleState IdleState;
     public PlayerWallSlideState WallSlideState;
+    public PlayerFallState PlayerFallState { get; private set; }
 
     InputManager _inputManager;
     
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
         JumpState = new PlayerJumpState(this);
         IdleState = new PlayerIdleState(this);
         WallSlideState = new PlayerWallSlideState(this);
+        PlayerFallState = new PlayerFallState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -101,4 +103,12 @@ public class Player : MonoBehaviour
         return false;
     }
 
+
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10f, 10f, 600f, 100f));
+        string content = MovementStateMachine.CurrentState != null ? MovementStateMachine.CurrentState.ToString() : "(no current state)";
+        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
+        GUILayout.EndArea();
+    }
 }

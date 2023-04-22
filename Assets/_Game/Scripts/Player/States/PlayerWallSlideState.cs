@@ -13,6 +13,7 @@ public class PlayerWallSlideState : State
 
     public override void Enter()
     {
+        _player.PlayAnimation("wall_sliding");
     }
 
     public override void Tick()
@@ -20,6 +21,10 @@ public class PlayerWallSlideState : State
         if(_player.GroundCheck())
         {
             _player.MovementStateMachine.ChangeState(_player.IdleState);
+        }
+        else if (_player.JumpInput)
+        {
+            _player.MovementStateMachine.ChangeState(_player.JumpState);
         }
         else
         {

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : State
+public class PlayerIdleState : PlayerGroundedState
 {
     Player _player;
 
-    public PlayerIdleState(Player player)
+    public PlayerIdleState(Player player) : base(player)
     {
         _player = player;
     }
@@ -19,14 +19,16 @@ public class PlayerIdleState : State
 
     public override void Tick()
     {
+        base.Tick();
+
         if (Mathf.Approximately(0, _player.MoveInput.x) == false)
         {
             _player.MovementStateMachine.ChangeState(_player.MoveState);
         }
 
-        if (_player.JumpInput)
-        {
-            _player.MovementStateMachine.ChangeState(_player.JumpState);
-        }
+        //if (_player.JumpInput)
+        //{
+        //    _player.MovementStateMachine.ChangeState(_player.JumpState);
+        //}
     }
 }
