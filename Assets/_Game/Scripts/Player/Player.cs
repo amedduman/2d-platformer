@@ -74,32 +74,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void EnterJumpStateIfJumpButtonPressed()
-    {
-        if (JumpInput)
-        {
-            MovementStateMachine.ChangeState(JumpState);
-        }
-    }
 
-    public void EnterFallStateIfNoGroundAndVelocityYisNegative()
-    {
-        if (GroundCheck() == false)
-        {
-            if (Rb.velocity.y < 0)
-            {
-                MovementStateMachine.ChangeState(FallState);
-            }
-        }
-    }
-
-    public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
-    {
-        if(GroundCheck() && Rb.velocity.y <= 0)
-        {
-            MovementStateMachine.ChangeState(IdleState);
-        }
-    }
 
     public bool IsMovingHorizontally()
     {
@@ -132,6 +107,11 @@ public class Player : MonoBehaviour
         return false;
     }
 
+    public bool IsVelocityOnYAxisisNegative()
+    {
+        return Rb.velocity.y < 0;
+    }
+
     public void Jump()
     {
         Rb.velocity = new Vector2(Rb.velocity.x, JumpSpeed);
@@ -144,5 +124,54 @@ public class Player : MonoBehaviour
         string content = MovementStateMachine.CurrentState != null ? MovementStateMachine.CurrentState.ToString() : "(no current state)";
         GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
         GUILayout.EndArea();
+    }
+
+    public void EnterJumpStateIfJumpButtonPressed()
+    {
+        if (JumpInput)
+        {
+            MovementStateMachine.ChangeState(JumpState);
+        }
+    }
+
+    public void EnterFallStateIfNoGroundAndVelocityYisNegative()
+    {
+        if (GroundCheck() == false)
+        {
+            if (Rb.velocity.y < 0)
+            {
+                MovementStateMachine.ChangeState(FallState);
+            }
+        }
+    }
+
+    public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
+    {
+        if(GroundCheck() && Rb.velocity.y <= 0)
+        {
+            MovementStateMachine.ChangeState(IdleState);
+        }
+    }
+
+    public void EnterWallSlideStateIfThereisWallAndVelocityYisNegative()
+    {
+        if (CheckWall())
+        {
+            if (Rb.velocity.y < 0)
+            {
+                MovementStateMachine.ChangeState(WallSlideState);
+            }
+        }
+    }
+
+    public void EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally()
+    {
+        if (GroundCheck())
+        {
+            if(IsMovingHorizontally())
+            {
+                MovementStateMachine.ChangeState(MoveState);
+            }
+        }
     }
 }

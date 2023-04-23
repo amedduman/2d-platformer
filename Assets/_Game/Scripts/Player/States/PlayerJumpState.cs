@@ -21,26 +21,28 @@ public class PlayerJumpState : State<Player>
     public override void Tick()
     {
         Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+        Owner.EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally();
         Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
-        if (Owner.CheckWall())
-        {
-            if (Owner.Rb.velocity.y < 0)
-            {
-                Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
-            }
-        }
+        Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
+//        if (Owner.CheckWall())
+//        {
+//            if (Owner.Rb.velocity.y < 0)
+//            {
+//                Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+//            }
+//        }
     }
 
     public override void FixedTick()
     {
-        if (Owner.GroundCheck())
-        {
-            if(Owner.IsMovingHorizontally())
-            {
-                Owner.MovementStateMachine.ChangeState(Owner.MoveState);
-            }
-        }    
-        else
+//        if (Owner.GroundCheck())
+//        {
+//            if(Owner.IsMovingHorizontally())
+//            {
+//                Owner.MovementStateMachine.ChangeState(Owner.MoveState);
+//            }
+//        }
+        if(Owner.GroundCheck() == false)
         {
             Owner.MoveHorizontally();
 
