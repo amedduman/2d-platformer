@@ -2,38 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerWallJumpState : State
+public class PlayerWallJumpState : State<Player>
 {
-    Player _player;
-    public PlayerWallJumpState(Player player)
-    {
-        _player = player;
+    public PlayerWallJumpState(Player sm) : base(sm) {
     }
+
 
     public override void Enter()
     {
-        if (Mathf.Approximately(0, _player.MoveInput.x))
+        if (Mathf.Approximately(0, Owner.MoveInput.x))
         {
-            _player.MovementStateMachine.ChangeState(_player.FallState);
+            Debug.Log("entered fall state form wall jump state");
+            Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
         else
         {
-            _player.PlayAnimation("jump_start");
-            _player.Jump();
+            Owner.PlayAnimation("jump_start");
+            Owner.Jump();
         }
     }
 
     public override void Tick()
     {
-        if (_player.GroundCheck())
+        Debug.Log("tick form wall jump");
+        if (Owner.GroundCheck())
         {
-            _player.MovementStateMachine.ChangeState(_player.IdleState);
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
         
     }
 
     public override void FixedTick()
     {
-        _player.MoveHorizontally();
+        Owner.MoveHorizontally();
     }
 }

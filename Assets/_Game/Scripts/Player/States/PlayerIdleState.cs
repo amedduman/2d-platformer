@@ -2,28 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : PlayerGroundedState
+public class PlayerIdleState : State<Player>
 {
-    Player _player;
-
-    public PlayerIdleState(Player player) : base(player)
-    {
-        _player = player;
+    public PlayerIdleState(Player sm) : base(sm) {
     }
+
+
+
+    //    Player _player;
+
+//    public PlayerIdleState(Player player)
+//    {
+//        _player = player;
+//    }
 
     public override void Enter()
     {
-        _player.PlayAnimation("Idle");
-        _player.Rb.velocity = Vector2.zero;
+        Owner.PlayAnimation("Idle");
+        Owner.Rb.velocity = Vector2.zero;
     }
 
     public override void Tick()
     {
-        base.Tick();
+        Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
+        Owner.EnterJumpStateIfJumpButtonPressed();
 
-        if (Mathf.Approximately(0, _player.MoveInput.x) == false)
+        if (Mathf.Approximately(0, Owner.MoveInput.x) == false)
         {
-            _player.MovementStateMachine.ChangeState(_player.MoveState);
+            Owner.MovementStateMachine.ChangeState(Owner.MoveState);
         }
     }
 }

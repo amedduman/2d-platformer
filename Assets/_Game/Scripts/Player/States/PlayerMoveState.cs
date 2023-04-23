@@ -2,41 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : PlayerGroundedState
+public class PlayerMoveState : State<Player>
 {
-    Player _player;
-
-    public PlayerMoveState(Player player) : base(player)
-    {
-        _player = player;
+    public PlayerMoveState(Player sm) : base(sm) {
     }
+
 
     public override void Enter()
     {
-        _player.MyAnimator.Play("Walking");
+        Owner.MyAnimator.Play("Walking");
     }
 
     public override void Tick()
     {
-        base.Tick();
+        Owner.EnterJumpStateIfJumpButtonPressed();
+        Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
 
-        //if (_player.JumpInput)
-        //{
-        //    _player.MovementStateMachine.ChangeState(_player.JumpState);
-        //}
-
-        if(Mathf.Approximately(0, _player.MoveInput.x))
+        if(Mathf.Approximately(0, Owner.MoveInput.x))
         {
-            _player.MovementStateMachine.ChangeState(_player.IdleState);
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
     }
 
     public override void FixedTick()
     {
-        _player.MoveHorizontally();
+        Owner.MoveHorizontally();
     }
-
-    
-
-    
 }

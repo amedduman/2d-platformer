@@ -1,9 +1,9 @@
 using ImpossibleOdds.Runnables;
 
-public class StateMachine : IRunnable, IFixedRunnable
+public class StateMachine<T> : IRunnable, IFixedRunnable
 {
-	public State CurrentState { get; private set; }
-	public State PreviousState { get; private set; }
+	public State<T> CurrentState { get; private set; }
+	public State<T> PreviousState { get; private set; }
 
 	bool _inTransition = false;
 
@@ -29,7 +29,7 @@ public class StateMachine : IRunnable, IFixedRunnable
 			CurrentState.FixedTick();
 	}
 
-	public void ChangeState(State newState)
+	public void ChangeState(State<T> newState)
 	{
 		// ensure we're ready for a new state
 		if (CurrentState == newState || _inTransition || newState == null)
@@ -46,7 +46,7 @@ public class StateMachine : IRunnable, IFixedRunnable
 	#endregion
 
 #region private
-	void ChangeStateRoutine(State newState)
+	void ChangeStateRoutine(State<T> newState)
 	{
 		_inTransition = true;
 		// begin our exit sequence, to prepare for new state

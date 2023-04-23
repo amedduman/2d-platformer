@@ -1,19 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerFallState : PlayerInAirState
+public class PlayerFallState : State<Player>
 {
-    Player _player;
-
-    public PlayerFallState(Player player) : base(player)
-    {
-        Debug.Log("enter fall state");
-        _player = player;
+    public PlayerFallState(Player sm) : base(sm) {
     }
+
+    State<Player> _previousState;
 
     public override void Enter()
     {
-        _player.PlayAnimation("falling");
+        Debug.Log("entered fall state");
+        _previousState = Owner.MovementStateMachine.PreviousState;
+
+        Owner.PlayAnimation("falling");
+    }
+
+    public override void Tick()
+    {
+        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+        if (_previousState == Owner.WallSlideState) return;
+        if (Owner.CheckWall())
+        {
+            if (Owner.Rb.velocity.y < 0)
+            {
+                Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+                Debug.Log("tick from fall state");
+            }
+        }
     }
 }

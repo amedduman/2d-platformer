@@ -2,56 +2,62 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJumpState : PlayerInAirState
+public class PlayerJumpState : State<Player>
 {
-    Player _player;
-
-    public PlayerJumpState(Player player) : base(player)
-    {
-        _player = player;
+    public PlayerJumpState(Player sm) : base(sm) {
     }
+
 
     public override void Enter()
     {
-        if (_player.GroundCheck())
+        if (Owner.GroundCheck())
         {
-            _player.PlayAnimation("jump_start");
-            _player.Jump();
+            Owner.PlayAnimation("jump_start");
+            Owner.Jump();
         }
         
     }
 
     public override void Tick()
     {
-        base.Tick();
+        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+        Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
+        if (Owner.CheckWall())
+        {
+            if (Owner.Rb.velocity.y < 0)
+            {
+                Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+            }
+        }
     }
 
     public override void FixedTick()
     {
-        if (_player.GroundCheck())
+        if (Owner.GroundCheck())
         {
-            if(_player.IsMovingHorizontally())
+            if(Owner.IsMovingHorizontally())
             {
-                _player.MovementStateMachine.ChangeState(_player.MoveState);
+                Owner.MovementStateMachine.ChangeState(Owner.MoveState);
             }
         }    
         else
         {
-            _player.MoveHorizontally();
+            Owner.MoveHorizontally();
 
             if (IsPlayerFalling())
             {
-                _player.PlayAnimation("falling");
+                Owner.MovementStateMachine.ChangeState(Owner.FallState);
+                Owner.PlayAnimation("falling");
             }
             else
             {
-                _player.PlayAnimation("jump_continue");
+                Owner.PlayAnimation("jump_continue");
             }
         }
     }
 
     bool IsPlayerFalling()
     {
-        return _player.Rb.velocity.y < 0;
+        return Owner.Rb.velocity.y < 0;
     }
 }

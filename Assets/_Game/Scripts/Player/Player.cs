@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public bool JumpInput { get; private set; }
     public Rigidbody2D Rb { get; private set; }
-    public StateMachine MovementStateMachine;
+    public StateMachine<Player> MovementStateMachine;
     public PlayerMoveState MoveState;
     public PlayerJumpState JumpState;
     public PlayerIdleState IdleState;
@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public PlayerWallJumpState WallJumpState { get; private set; }
 
     InputManager _inputManager;
-    
+
 
     private void Awake()
     {
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        MovementStateMachine = new StateMachine();
+        MovementStateMachine = new StateMachine<Player>();
         MoveState = new PlayerMoveState(this);
         JumpState = new PlayerJumpState(this);
         IdleState = new PlayerIdleState(this);
@@ -71,6 +71,33 @@ public class Player : MonoBehaviour
             float degree = MoveInput.x >= 0 ? 0 : 180;
             var original = transform.rotation.eulerAngles;
             transform.localEulerAngles = new Vector3(original.x, degree, original.z);
+        }
+    }
+
+    public void EnterJumpStateIfJumpButtonPressed()
+    {
+        if (JumpInput)
+        {
+            MovementStateMachine.ChangeState(JumpState);
+        }
+    }
+
+    public void EnterFallStateIfNoGroundAndVelocityYisNegative()
+    {
+        if (GroundCheck() == false)
+        {
+            if (Rb.velocity.y < 0)
+            {
+                MovementStateMachine.ChangeState(FallState);
+            }
+        }
+    }
+
+    public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
+    {
+        if(GroundCheck() && Rb.velocity.y <= 0)
+        {
+            MovementStateMachine.ChangeState(IdleState);
         }
     }
 

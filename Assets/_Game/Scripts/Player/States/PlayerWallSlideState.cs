@@ -2,33 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerWallSlideState : State
+public class PlayerWallSlideState : State<Player>
 {
-    Player _player;
-
-    public PlayerWallSlideState(Player player)
-    {
-        _player = player;
+    public PlayerWallSlideState(Player sm) : base(sm) {
     }
+
+    //    Player _player;
+//
+//    public PlayerWallSlideState(Player player)
+//    {
+//        _player = player;
+//    }
 
     public override void Enter()
     {
-        _player.PlayAnimation("wall_sliding");
+        Owner.PlayAnimation("wall_sliding");
     }
 
     public override void Tick()
     {
-        if(_player.GroundCheck())
+        if(Owner.GroundCheck())
         {
-            _player.MovementStateMachine.ChangeState(_player.IdleState);
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
-        else if(_player.CheckWall() == false)
+        else if(Owner.CheckWall() == false)
         {
-            _player.MovementStateMachine.ChangeState(_player.FallState);
+            Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
-        else if (_player.CheckWall() && _player.JumpInput)
+        else if (Owner.CheckWall() && Owner.JumpInput)
         {
-            _player.MovementStateMachine.ChangeState(_player.WallJumpState);
+            Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
         }
         //else if (_player.JumpInput)
         //{
@@ -36,7 +39,7 @@ public class PlayerWallSlideState : State
         //}
         else
         {
-            _player.Rb.velocity = new Vector2(_player.Rb.velocity.x, -2);
+            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -2);
         }
 
         //_player.MoveHorizontally();
