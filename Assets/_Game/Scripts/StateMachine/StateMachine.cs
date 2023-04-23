@@ -32,7 +32,7 @@ public class StateMachine : IRunnable, IFixedRunnable
 	public void ChangeState(State newState)
 	{
 		// ensure we're ready for a new state
-		if (CurrentState == newState || _inTransition)
+		if (CurrentState == newState || _inTransition || newState == null)
 			return;
 
 		ChangeStateRoutine(newState);
@@ -52,9 +52,11 @@ public class StateMachine : IRunnable, IFixedRunnable
 		// begin our exit sequence, to prepare for new state
 		if (CurrentState != null)
 			CurrentState.Exit();
-		// save our current state, in case we want to return to it
-		if (PreviousState != null)
-			PreviousState = CurrentState;
+        // save our current state, in case we want to return to it
+        //if (PreviousState != null)
+        //	PreviousState = CurrentState;
+        PreviousState = CurrentState;
+
 
 		CurrentState = newState;
 

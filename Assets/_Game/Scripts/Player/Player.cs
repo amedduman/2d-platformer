@@ -23,7 +23,8 @@ public class Player : MonoBehaviour
     public PlayerJumpState JumpState;
     public PlayerIdleState IdleState;
     public PlayerWallSlideState WallSlideState;
-    public PlayerFallState PlayerFallState { get; private set; }
+    public PlayerFallState FallState { get; private set; }
+    public PlayerWallJumpState WallJumpState { get; private set; }
 
     InputManager _inputManager;
     
@@ -41,7 +42,8 @@ public class Player : MonoBehaviour
         JumpState = new PlayerJumpState(this);
         IdleState = new PlayerIdleState(this);
         WallSlideState = new PlayerWallSlideState(this);
-        PlayerFallState = new PlayerFallState(this);
+        FallState = new PlayerFallState(this);
+        WallJumpState = new PlayerWallJumpState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -101,6 +103,11 @@ public class Player : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void Jump()
+    {
+        Rb.velocity = new Vector2(Rb.velocity.x, JumpSpeed);
     }
 
 

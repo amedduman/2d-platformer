@@ -17,11 +17,11 @@ public abstract class PlayerGroundedState : State
         {
             Player.MovementStateMachine.ChangeState(Player.JumpState);
         }
-        else if(Player.GroundCheck() == false)
+        if (Player.GroundCheck() == false)
         {
-            if(Player.Rb.velocity.y < 0)
+            if (Player.Rb.velocity.y < 0)
             {
-                Player.MovementStateMachine.ChangeState(Player.PlayerFallState);
+                Player.MovementStateMachine.ChangeState(Player.FallState);
             }
         }
     }

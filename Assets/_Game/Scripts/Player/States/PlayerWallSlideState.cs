@@ -22,13 +22,23 @@ public class PlayerWallSlideState : State
         {
             _player.MovementStateMachine.ChangeState(_player.IdleState);
         }
-        else if (_player.JumpInput)
+        else if(_player.CheckWall() == false)
         {
-            _player.MovementStateMachine.ChangeState(_player.JumpState);
+            _player.MovementStateMachine.ChangeState(_player.FallState);
         }
+        else if (_player.CheckWall() && _player.JumpInput)
+        {
+            _player.MovementStateMachine.ChangeState(_player.WallJumpState);
+        }
+        //else if (_player.JumpInput)
+        //{
+        //    _player.MovementStateMachine.ChangeState(_player.JumpState);
+        //}
         else
         {
             _player.Rb.velocity = new Vector2(_player.Rb.velocity.x, -2);
         }
+
+        //_player.MoveHorizontally();
     }
 }

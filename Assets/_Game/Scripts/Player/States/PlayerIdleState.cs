@@ -25,10 +25,5 @@ public class PlayerIdleState : PlayerGroundedState
         {
             _player.MovementStateMachine.ChangeState(_player.MoveState);
         }
-
-        //if (_player.JumpInput)
-        //{
-        //    _player.MovementStateMachine.ChangeState(_player.JumpState);
-        //}
     }
 }

@@ -8,6 +8,7 @@ public class PlayerFallState : PlayerInAirState
 
     public PlayerFallState(Player player) : base(player)
     {
+        Debug.Log("enter fall state");
         _player = player;
     }
 

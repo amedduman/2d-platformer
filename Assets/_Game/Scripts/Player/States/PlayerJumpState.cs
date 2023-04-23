@@ -16,12 +16,9 @@ public class PlayerJumpState : PlayerInAirState
         if (_player.GroundCheck())
         {
             _player.PlayAnimation("jump_start");
-            Jump();
+            _player.Jump();
         }
-        else
-        {
-            _player.MovementStateMachine.ChangeState(_player.MoveState);
-        }
+        
     }
 
     public override void Tick()
@@ -36,10 +33,6 @@ public class PlayerJumpState : PlayerInAirState
             if(_player.IsMovingHorizontally())
             {
                 _player.MovementStateMachine.ChangeState(_player.MoveState);
-            }
-            else if (_player.Rb.velocity.y <= 0)
-            {
-                _player.MovementStateMachine.ChangeState(_player.IdleState);
             }
         }    
         else
@@ -56,13 +49,6 @@ public class PlayerJumpState : PlayerInAirState
             }
         }
     }
-
-    void Jump()
-    {
-        _player.Rb.velocity = new Vector2(_player.Rb.velocity.x, _player.JumpSpeed);
-    }
-
-    
 
     bool IsPlayerFalling()
     {
