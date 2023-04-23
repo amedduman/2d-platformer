@@ -33,7 +33,22 @@ public class StateMachine<T> : IRunnable, IFixedRunnable
 	{
 		// ensure we're ready for a new state
 		if (CurrentState == newState || _inTransition || newState == null)
+		{
+			UnityEngine.Debug.Log("can't enter " + newState.ToString());
+			if(CurrentState == newState)
+			{
+				UnityEngine.Debug.Log("1");
+			}
+			if(_inTransition)
+			{
+				UnityEngine.Debug.Log("2");
+			}
+			if(newState == null)
+			{
+				UnityEngine.Debug.Log("3");
+			}
 			return;
+		}
 
 		ChangeStateRoutine(newState);
 	}
@@ -60,11 +75,13 @@ public class StateMachine<T> : IRunnable, IFixedRunnable
 
 		CurrentState = newState;
 
+		_inTransition = false;
+
 		// begin our new Enter sequence
 		if (CurrentState != null)
 			CurrentState.Enter();
 
-		_inTransition = false;
+//		_inTransition = false;
 	}
 	#endregion
 

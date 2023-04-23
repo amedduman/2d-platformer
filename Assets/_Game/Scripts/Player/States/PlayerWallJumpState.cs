@@ -12,7 +12,6 @@ public class PlayerWallJumpState : State<Player>
     {
         if (Mathf.Approximately(0, Owner.MoveInput.x))
         {
-            Debug.Log("entered fall state form wall jump state");
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
         else
@@ -24,12 +23,10 @@ public class PlayerWallJumpState : State<Player>
 
     public override void Tick()
     {
-        Debug.Log("tick form wall jump");
         if (Owner.GroundCheck())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
-        
     }
 
     public override void FixedTick()

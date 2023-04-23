@@ -7,12 +7,6 @@ public class PlayerWallSlideState : State<Player>
     public PlayerWallSlideState(Player sm) : base(sm) {
     }
 
-    //    Player _player;
-//
-//    public PlayerWallSlideState(Player player)
-//    {
-//        _player = player;
-//    }
 
     public override void Enter()
     {
@@ -33,15 +27,9 @@ public class PlayerWallSlideState : State<Player>
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
         }
-        //else if (_player.JumpInput)
-        //{
-        //    _player.MovementStateMachine.ChangeState(_player.JumpState);
-        //}
         else
         {
             Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -2);
         }
-
-        //_player.MoveHorizontally();
     }
 }

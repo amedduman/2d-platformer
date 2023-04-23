@@ -9,7 +9,6 @@ public class PlayerFallState : State<Player>
 
     public override void Enter()
     {
-        Debug.Log("entered fall state");
         _previousState = Owner.MovementStateMachine.PreviousState;
 
         Owner.PlayAnimation("falling");
@@ -18,13 +17,12 @@ public class PlayerFallState : State<Player>
     public override void Tick()
     {
         Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
-        if (_previousState == Owner.WallSlideState) return;
+        if (_previousState == Owner.WallJumpState) return;
         if (Owner.CheckWall())
         {
             if (Owner.Rb.velocity.y < 0)
             {
                 Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
-                Debug.Log("tick from fall state");
             }
         }
     }
