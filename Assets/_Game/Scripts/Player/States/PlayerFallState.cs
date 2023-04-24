@@ -19,12 +19,5 @@ public class PlayerFallState : State<Player>
         Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
         if (_previousState == Owner.WallJumpState) return;
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
-//        if (Owner.CheckWall())
-//        {
-//            if (Owner.Rb.velocity.y < 0)
-//            {
-//                Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
-//            }
-//        }
     }
 }

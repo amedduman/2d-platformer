@@ -8,14 +8,6 @@ public class PlayerIdleState : State<Player>
     }
 
 
-
-    //    Player _player;
-
-//    public PlayerIdleState(Player player)
-//    {
-//        _player = player;
-//    }
-
     public override void Enter()
     {
         Owner.PlayAnimation("Idle");
