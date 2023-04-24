@@ -17,7 +17,7 @@ public class PlayerWallJumpState : State<Player>
         else
         {
             Owner.PlayAnimation("jump_start");
-            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 16);
+            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 20);
         }
     }
 
