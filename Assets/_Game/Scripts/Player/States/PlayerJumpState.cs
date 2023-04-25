@@ -29,6 +29,7 @@ public class PlayerJumpState : State<Player>
         {
             Owner.Jump();
         }
+
         else if(Owner.JumpInput == false)
         {
             if(IsPlayerFalling() == false)
@@ -51,9 +52,14 @@ public class PlayerJumpState : State<Player>
                 Owner.PlayAnimation("jump_continue");
             }
         }
+
         else
         {
             Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+//            if(Owner.GroundCheck() && Owner.Rb.velocity.y <= 0)
+//            {
+//                Owner.MovementStateMachine.ChangeState(Owner.FallState);
+//            }
         }
 
     }

@@ -1,15 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    public event Action JumpPerformed;
+
     PlayerInput _playerInput;
 
     private void Awake()
     {
         _playerInput = new PlayerInput();
         _playerInput.Enable();
+    }
+
+    void OnEnable()
+    {
+        _playerInput.Gameplay.Jump.performed += JumpButtonPressed;
+    }
+
+    void OnDisable()
+    {
+        _playerInput.Gameplay.Jump.performed -= JumpButtonPressed;
     }
 
     public Vector2 GetMovementVectorNormalized()
@@ -22,5 +34,10 @@ public class InputManager : MonoBehaviour
     public bool IsJumpButtonPressed()
     {
         return _playerInput.Gameplay.Jump.IsPressed();
+    }
+
+    private void JumpButtonPressed(InputAction.CallbackContext obj)
+    {
+        JumpPerformed?.Invoke();
     }
 }

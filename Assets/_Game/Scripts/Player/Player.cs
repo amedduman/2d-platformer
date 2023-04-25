@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
     public Vector2 MoveInput { get; private set; }
     public bool JumpInput { get; private set; }
+//    public bool HasPlayerStopPressingJumpButtonSiceLastJump {get;  set;} = true;
     public Rigidbody2D Rb { get; private set; }
     public StateMachine<Player> MovementStateMachine;
     public PlayerMoveState MoveState;
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     public PlayerWallJumpState WallJumpState { get; private set; }
 
     InputManager _inputManager;
-    float _jumpInputPressedTime;
+    bool _previousJumpInput;
 
 
     private void Awake()
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         MoveInput = _inputManager.GetMovementVectorNormalized();
+        _previousJumpInput = JumpInput;
         JumpInput = _inputManager.IsJumpButtonPressed();
     }
 
@@ -130,6 +132,7 @@ public class Player : MonoBehaviour
 
     public void EnterJumpStateIfJumpButtonPressed()
     {
+        if(_previousJumpInput) return;
         if (JumpInput)
         {
             MovementStateMachine.ChangeState(JumpState);
