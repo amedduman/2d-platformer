@@ -7,11 +7,9 @@ public class PlayerJumpState : State<Player>
     public PlayerJumpState(Player sm) : base(sm) {
     }
 
-    bool _hasReachedMaxVerticalVelocity = false;
 
     public override void Enter()
     {
-        _hasReachedMaxVerticalVelocity = false;
         if (Owner.GroundCheck())
         {
             Owner.PlayAnimation("jump_start");
@@ -21,23 +19,21 @@ public class PlayerJumpState : State<Player>
 
     public override void Tick()
     {
-//        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
-//        Owner.EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally();
         Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }
 
     public override void FixedTick()
     {
-        if(Owner.JumpInput && _hasReachedMaxVerticalVelocity == false)
+        if(Owner.JumpInput && Owner.GroundCheck())
         {
-            if (Owner.Rb.velocity.y < 15)
+            Owner.Jump();
+        }
+        else if(Owner.JumpInput == false)
+        {
+            if(IsPlayerFalling() == false)
             {
-                Owner.Jump();
-            }
-            else
-            {
-                _hasReachedMaxVerticalVelocity = true;
+                Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 0);
             }
         }
 

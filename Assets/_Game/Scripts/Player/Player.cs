@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
 
     [field: SerializeField] public float MovementSpeed { get; private set; } = 16;
     [field: SerializeField] public float JumpSpeed { get; private set; } = 16;
-//    [field: SerializeField] public float MinJumpSpeed { get; private set; } = 6;
     [field: SerializeField] public LayerMask JumpableLayers { get; private set; }
 
     [field: SerializeField] public Transform WallCheckRayOrigin { get; private set; }
@@ -54,21 +53,7 @@ public class Player : MonoBehaviour
     {
         MoveInput = _inputManager.GetMovementVectorNormalized();
         JumpInput = _inputManager.IsJumpButtonPressed();
-
-//        CalculateJumpInputPressedTime();
     }
-
-//    void CalculateJumpInputPressedTime()
-//    {
-//        if(JumpInput)
-//        {
-//            _jumpInputPressedTime += Time.deltaTime;
-//        }
-//        else
-//        {
-//            _jumpInputPressedTime = 0;
-//        }
-//    }
 
     private void OnDrawGizmos()
     {
@@ -130,35 +115,10 @@ public class Player : MonoBehaviour
 
     public void Jump()
     {
-//        if(_jumpInputPressedTime < 1) _jumpInputPressedTime = 1;
-//        var speed = Mathf.Min(MinJumpSpeed * _jumpInputPressedTime, MaxJumpSpeed);
 //        Rb.velocity = new Vector2(Rb.velocity.x, JumpSpeed);
         var force = new Vector2(0, JumpSpeed);
         Rb.AddForce(force, ForceMode2D.Impulse);
-//        StartCoroutine(JumpCo());
     }
-
-//    IEnumerator JumpCo()
-//    {
-//        bool continueToJump = true;
-//        int iteration = 0;
-//        while (continueToJump)
-//        {
-//            iteration++;
-//            if(iteration > 4)
-//            {
-//                continueToJump = false;
-//            }
-//            if(JumpInput = false)
-//            {
-//                continueToJump = false;
-//            }
-//            Debug.Log(iteration);
-//            Rb.velocity = new Vector2(Rb.velocity.x, JumpSpeed * iteration);
-//            yield return new WaitForFixedUpdate();
-//        }
-//    }
-
 
     private void OnGUI()
     {
