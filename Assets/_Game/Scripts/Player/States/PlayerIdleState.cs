@@ -17,10 +17,6 @@ public class PlayerIdleState : State<Player>
     public override void Tick()
     {
         Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
-//        if (Owner.HasPlayerStopPressingJumpButtonSiceLastJump)
-//        {
-//            Owner.EnterJumpStateIfJumpButtonPressed();
-//        }
         Owner.EnterJumpStateIfJumpButtonPressed();
 
         if (Mathf.Approximately(0, Owner.MoveInput.x) == false)

@@ -16,7 +16,11 @@ public class PlayerFallState : State<Player>
 
     public override void Tick()
     {
-        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+//        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
+        if(Owner.GroundCheck())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
+        }
         if (_previousState == Owner.WallJumpState) return;
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }

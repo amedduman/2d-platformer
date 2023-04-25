@@ -56,10 +56,6 @@ public class PlayerJumpState : State<Player>
         else
         {
             Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
-//            if(Owner.GroundCheck() && Owner.Rb.velocity.y <= 0)
-//            {
-//                Owner.MovementStateMachine.ChangeState(Owner.FallState);
-//            }
         }
 
     }

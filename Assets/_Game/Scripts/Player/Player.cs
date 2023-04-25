@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
 
     public Vector2 MoveInput { get; private set; }
     public bool JumpInput { get; private set; }
-//    public bool HasPlayerStopPressingJumpButtonSiceLastJump {get;  set;} = true;
     public Rigidbody2D Rb { get; private set; }
     public StateMachine<Player> MovementStateMachine;
     public PlayerMoveState MoveState;
@@ -152,9 +151,14 @@ public class Player : MonoBehaviour
 
     public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
     {
+        Debug.Log(Rb.velocity.y);
         if(GroundCheck() && Rb.velocity.y <= 0)
         {
             MovementStateMachine.ChangeState(IdleState);
+        }
+        else
+        {
+            Debug.Log("can't enter idle state");
         }
     }
 
