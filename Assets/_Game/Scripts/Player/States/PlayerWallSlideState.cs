@@ -27,10 +27,10 @@ public class PlayerWallSlideState : State<Player>
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
         }
-        else if(Owner.CheckLedge())
-        {
-            Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
-        }
+        //else if(Owner.CheckLedge())
+        //{
+        //    Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
+        //}
         else
         {
             Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -2);

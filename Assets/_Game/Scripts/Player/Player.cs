@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     public PlayerFallState FallState { get; private set; }
     public PlayerWallJumpState WallJumpState { get; private set; }
     public PlayerLedgeClimbState LedgeClimbState { get; private set; }
+    public PlayerLedgeHangingState LedgeHangingState { get; private set; }
+
 
     InputManager _inputManager;
 
@@ -54,6 +56,7 @@ public class Player : MonoBehaviour
         FallState = new PlayerFallState(this);
         WallJumpState = new PlayerWallJumpState(this);
         LedgeClimbState = new PlayerLedgeClimbState(this);
+        LedgeHangingState = new PlayerLedgeHangingState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }

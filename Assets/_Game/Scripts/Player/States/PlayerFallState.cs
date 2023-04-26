@@ -22,7 +22,7 @@ public class PlayerFallState : State<Player>
         }
         if(Owner.CheckLedge())
         {
-            Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
+            Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
         }
 
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();

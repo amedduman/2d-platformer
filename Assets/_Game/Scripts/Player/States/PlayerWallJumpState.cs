@@ -27,14 +27,17 @@ public class PlayerWallJumpState : State<Player>
 
         if(Owner.WallCheck())
         {
-            Debug.Log("wall slide form wall jump");
-            Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+            Owner.MovementStateMachine.ChangeState( Owner.WallSlideState);
         }
         if (Owner.CheckGround())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
-        if(Owner.WallCheck() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
+        if (Owner.CheckLedge())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
+        }
+        if (Owner.WallCheck() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
         {
 //            Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
