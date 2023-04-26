@@ -20,6 +20,10 @@ public class PlayerFallState : State<Player>
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
+        if(Owner.CheckLedge())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
+        }
 
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }

@@ -1,16 +1,19 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
+	public Transform Debug_Target;
+	public Transform  Debug_Target2;
     [field: SerializeField] public Animator MyAnimator { get; private set; }
 
     [field: SerializeField] public float MovementSpeed { get; private set; } = 16;
     [field: SerializeField] public float JumpSpeed { get; private set; } = 16;
     [field: SerializeField] public LayerMask JumpableLayers { get; private set; }
 
+    [field: SerializeField] public Transform GroundCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform WallCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform LedgeCheckRayOrigin { get; private set; }
 
@@ -55,6 +58,8 @@ public class Player : MonoBehaviour
         MovementStateMachine.ChangeState(IdleState);
     }
 
+//    public bool isClimb;
+
     void Update()
     {
         MoveInput = _inputManager.GetMovementVectorNormalized();
@@ -62,11 +67,21 @@ public class Player : MonoBehaviour
         JumpInput = _inputManager.IsJumpButtonPressed();
 
         LogStates();
+
+//        if(isClimb)
+//        {
+//            PlayAnimation("ledge-climbing");
+//            transform.position = Debug_Target.position;
+//        }
+//        else
+//        {
+//            PlayAnimation("Idle");
+//        }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position, new Vector3(.1f, .1f, .3f));
+        Gizmos.DrawCube(GroundCheckRayOrigin.position, new Vector3(.1f, .1f, .3f));
 
         Gizmos.DrawLine(WallCheckRayOrigin.position, WallCheckRayOrigin.position + transform.right * WallCheckRayLegth);
 
@@ -98,7 +113,7 @@ public class Player : MonoBehaviour
 
     public bool CheckGround()
     {
-        if (Physics2D.OverlapBox(transform.position,
+        if (Physics2D.OverlapBox(GroundCheckRayOrigin.position,
             new Vector2(.1f, .1f), 0, JumpableLayers) != null)
         {
             return true;
@@ -198,7 +213,7 @@ public class Player : MonoBehaviour
         {
             return false;
         }
-        else if(CheckGround())
+        else if(WallCheck())
         {
             return true;
         }
