@@ -15,17 +15,21 @@ public class PlayerWallSlideState : State<Player>
 
     public override void Tick()
     {
-        if(Owner.GroundCheck())
+        if(Owner.CheckGround())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
-        else if(Owner.CheckWall() == false)
+        else if(Owner.WallCheck() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
-        else if (Owner.CheckWall() && Owner.JumpInput)
+        else if (Owner.WallCheck() && Owner.JumpInput)
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
+        }
+        else if(Owner.CheckLedge())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
         }
         else
         {

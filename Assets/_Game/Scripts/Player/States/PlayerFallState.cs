@@ -5,23 +5,22 @@ public class PlayerFallState : State<Player>
     public PlayerFallState(Player sm) : base(sm) {
     }
 
-    State<Player> _previousState;
-
     public override void Enter()
     {
-        _previousState = Owner.MovementStateMachine.PreviousState;
-
         Owner.PlayAnimation("falling");
+//        Owner.MyAnimator.CrossFade("falling",.4f,0);
     }
 
-    public override void Tick()
+    public override void FixedTick()
     {
-//        Owner.EnterIdleStateIfThereIsGroundAndVelocityYisNegative();
-        if(Owner.GroundCheck())
+        if(Owner.MoveInput.x != 0 || Owner.MoveInput.y != 0)
+            Owner.MoveHorizontally();
+
+        if(Owner.CheckGround())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
         }
-        if (_previousState == Owner.WallJumpState) return;
+
         Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }
 }

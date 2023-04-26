@@ -10,7 +10,7 @@ public class PlayerJumpState : State<Player>
 
     public override void Enter()
     {
-        if (Owner.GroundCheck())
+        if (Owner.CheckGround())
         {
             Owner.PlayAnimation("jump_start");
             Owner.Jump();
@@ -25,7 +25,7 @@ public class PlayerJumpState : State<Player>
 
     public override void FixedTick()
     {
-        if(Owner.JumpInput && Owner.GroundCheck())
+        if(Owner.JumpInput && Owner.CheckGround())
         {
             Owner.Jump();
         }
@@ -38,9 +38,12 @@ public class PlayerJumpState : State<Player>
             }
         }
 
-        else if(Owner.GroundCheck() == false)
+        else if(Owner.CheckGround() == false)
         {
-            Owner.MoveHorizontally();
+            if(Owner.WallCheck() == false)
+            {
+                Owner.MoveHorizontally();
+            }
 
             if (IsPlayerFalling())
             {

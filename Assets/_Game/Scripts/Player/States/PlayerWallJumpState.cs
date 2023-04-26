@@ -7,30 +7,38 @@ public class PlayerWallJumpState : State<Player>
     public PlayerWallJumpState(Player sm) : base(sm) {
     }
 
-
+    int dir; // this is the opposite dir to the wall which player is sliding
     public override void Enter()
     {
-        if (Mathf.Approximately(0, Owner.MoveInput.x))
-        {
-            Owner.MovementStateMachine.ChangeState(Owner.FallState);
-        }
-        else
-        {
-            Owner.PlayAnimation("jump_start");
-            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 20);
-        }
-    }
-
-    public override void Tick()
-    {
-        if (Owner.GroundCheck())
-        {
-            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
-        }
+        Owner.PlayAnimation("jump_start");
+        dir = Owner.transform.rotation.eulerAngles.y == 0 ? -1 : 1;
+        var degree = dir == 1 ? 0 : 180;
+        var original = Owner.transform.rotation.eulerAngles;
+        Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
+//        Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 20);
+        Owner.Rb.velocity = new Vector2(dir * 2, 20);
     }
 
     public override void FixedTick()
     {
-        Owner.MoveHorizontally();
+        // allow player to move the dir
+        if(Owner.MoveInput.x == dir)
+            Owner.MoveHorizontally();
+
+        if(Owner.WallCheck())
+        {
+            Debug.Log("wall slide form wall jump");
+            Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+        }
+        if (Owner.CheckGround())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
+        }
+        if(Owner.WallCheck() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
+        {
+//            Owner.MovementStateMachine.ChangeState(Owner.FallState);
+        }
+
+//        Owner.MoveHorizontally();
     }
 }
