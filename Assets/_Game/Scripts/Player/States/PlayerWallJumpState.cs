@@ -16,26 +16,31 @@ public class PlayerWallJumpState : State<Player>
         var original = Owner.transform.rotation.eulerAngles;
         Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
 //        Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 20);
-        Owner.Rb.velocity = new Vector2(dir * 2, 20);
+        Owner.Rb.velocity = new Vector2(dir * 6, 20);
     }
 
     public override void FixedTick()
     {
         // allow player to move the dir
-        if(Owner.MoveInput.x == dir)
+        if ((int)Owner.MoveInput.x == dir || Owner.Rb.velocity.y < 0)
+        {
             Owner.MoveHorizontally();
+        }
 
         if(Owner.WallCheck())
         {
             Owner.MovementStateMachine.ChangeState( Owner.WallSlideState);
+            return;
         }
         if (Owner.CheckGround())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
+            return;
         }
         if (Owner.CheckLedge())
         {
             Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
+            return;
         }
         if (Owner.WallCheck() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
         {

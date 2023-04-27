@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     public PlayerWallJumpState WallJumpState { get; private set; }
     public PlayerLedgeClimbState LedgeClimbState { get; private set; }
     public PlayerLedgeHangingState LedgeHangingState { get; private set; }
+    public PlayerLeaveWallSlidingState LeaveWallSlidingState { get; private set; }
 
 
     InputManager _inputManager;
@@ -57,11 +58,10 @@ public class Player : MonoBehaviour
         WallJumpState = new PlayerWallJumpState(this);
         LedgeClimbState = new PlayerLedgeClimbState(this);
         LedgeHangingState = new PlayerLedgeHangingState(this);
+        LeaveWallSlidingState = new PlayerLeaveWallSlidingState(this); 
 
         MovementStateMachine.ChangeState(IdleState);
     }
-
-//    public bool isClimb;
 
     void Update()
     {
@@ -70,16 +70,6 @@ public class Player : MonoBehaviour
         JumpInput = _inputManager.IsJumpButtonPressed();
 
         LogStates();
-
-//        if(isClimb)
-//        {
-//            PlayAnimation("ledge-climbing");
-//            transform.position = Debug_Target.position;
-//        }
-//        else
-//        {
-//            PlayAnimation("Idle");
-//        }
     }
 
     private void OnDrawGizmos()
@@ -138,6 +128,18 @@ public class Player : MonoBehaviour
     public bool IsVelocityOnYAxisisNegative()
     {
         return Rb.velocity.y < 0;
+    }
+
+    public bool IsMoveInputParallelWithTransformRight()
+    {
+        int dir = (int)transform.right.x;
+        int input = (int)MoveInput.x;
+
+        if (dir == input)
+        {
+            return true;
+        }
+        return false;
     }
 
     public void Jump()

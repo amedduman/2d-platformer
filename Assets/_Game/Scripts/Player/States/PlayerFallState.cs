@@ -8,12 +8,11 @@ public class PlayerFallState : State<Player>
     public override void Enter()
     {
         Owner.PlayAnimation("falling");
-//        Owner.MyAnimator.CrossFade("falling",.4f,0);
     }
 
     public override void FixedTick()
     {
-        if(Owner.MoveInput.x != 0 || Owner.MoveInput.y != 0)
+        if(Owner.MoveInput.x != 0 || Owner.MoveInput.y != 0) // because it will change the rotation of the player is facing
             Owner.MoveHorizontally();
 
         if(Owner.CheckGround())
