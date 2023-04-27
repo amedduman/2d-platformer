@@ -731,7 +731,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     Standalone: IMPOSSIBLE_ODDS_LOGGING_EDITOR_ERROR;IMPOSSIBLE_ODDS_LOGGING_INFO
-    WebGL: IMPOSSIBLE_ODDS_LOGGING_EDITOR_INFO;IMPOSSIBLE_ODDS_LOGGING_INFO
+    WebGL: IMPOSSIBLE_ODDS_LOGGING_EDITOR_ERROR;IMPOSSIBLE_ODDS_LOGGING_INFO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

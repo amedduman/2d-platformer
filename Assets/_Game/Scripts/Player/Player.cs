@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [field: SerializeField] public Transform GroundCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform WallCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform LedgeCheckRayOrigin { get; private set; }
+    [field: SerializeField] public Transform LedgeHeightRayCheckOrigin { get; private set; }
+    
 
     [field: SerializeField] public float WallCheckRayLegth { get; private set; } = 1;
     [field: SerializeField] public float LedgeCheckRayLegth { get; private set; } = 1;
