@@ -17,6 +17,12 @@ public class PlayerLeaveWallSlidingState : State<Player>
 
     public override void Tick()
     {
+        if (Owner.CheckGround())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.IdleState);
+            return;
+        }
+        
         if (_currentTime > _wallJumpTime)
         {
             LeaveWall();

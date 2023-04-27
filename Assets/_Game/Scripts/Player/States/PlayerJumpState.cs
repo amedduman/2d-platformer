@@ -20,7 +20,21 @@ public class PlayerJumpState : State<Player>
     public override void Tick()
     {
         Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
-        Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
+        if (Owner.WallCheck())
+        {
+            if (Owner.MoveInput.magnitude != 0)
+            {
+                if (Owner.IsMoveInputParallelWithTransformRight())
+                {
+                    if (Owner.Rb.velocity.y < 0)
+                    {
+                        Debug.Log("fuck");
+                        Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+                    }
+                }
+            }
+        }
+        // Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }
 
     public override void FixedTick()
@@ -42,7 +56,10 @@ public class PlayerJumpState : State<Player>
         {
             if(Owner.WallCheck() == false)
             {
-                Owner.MoveHorizontally();
+                if (Owner.MoveInput.magnitude != 0) // don't do anything if no input is given
+                {
+                    Owner.MoveHorizontally();
+                }
             }
 
             if (IsPlayerFalling())

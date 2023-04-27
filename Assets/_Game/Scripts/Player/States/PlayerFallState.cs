@@ -12,6 +12,9 @@ public class PlayerFallState : State<Player>
 
     public override void FixedTick()
     {
+        if (Owner.Rb.velocity.y < -25)
+            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -25);// limit the y velocity when falling
+        
         if(Owner.MoveInput.x != 0 || Owner.MoveInput.y != 0) // because it will change the rotation of the player is facing
             Owner.MoveHorizontally();
 
@@ -23,7 +26,20 @@ public class PlayerFallState : State<Player>
         {
             Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
         }
-
-        Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
+        
+        if (Owner.WallCheck())
+        {
+            if (Owner.MoveInput.magnitude != 0)
+            {
+                if (Owner.IsMoveInputParallelWithTransformRight())
+                {
+                    if (Owner.Rb.velocity.y < 0)
+                    {
+                        Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
+                    }
+                }
+            }
+        }
+        // Owner.EnterWallSlideStateIfThereisWallAndVelocityYisNegative();
     }
 }

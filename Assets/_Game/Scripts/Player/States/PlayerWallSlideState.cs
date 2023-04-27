@@ -10,6 +10,7 @@ public class PlayerWallSlideState : State<Player>
 
     public override void Enter()
     {
+        // Debug.Log("entered from " + Owner.MovementStateMachine.PreviousState);
         Owner.PlayAnimation("wall_sliding");
     }
 
