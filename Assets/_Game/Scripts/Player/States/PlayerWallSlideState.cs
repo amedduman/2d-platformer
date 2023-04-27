@@ -18,22 +18,16 @@ public class PlayerWallSlideState : State<Player>
         if(Owner.CheckGround())
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
-        }
-        else if(Owner.WallCheck() == false)
+        } 
+        if(Owner.WallCheck() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
-        else if (Owner.WallCheck() && Owner.JumpInput)
+        if (Owner.WallCheck() && Owner.JumpInput)
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
         }
-        //else if(Owner.CheckLedge())
-        //{
-        //    Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
-        //}
-        else
-        {
-            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -2);
-        }
+
+        Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -2);
     }
 }
