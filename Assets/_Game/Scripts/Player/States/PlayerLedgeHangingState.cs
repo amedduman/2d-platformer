@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerLedgeHangingState : State<Player>
@@ -16,5 +17,18 @@ public class PlayerLedgeHangingState : State<Player>
         Owner.Rb.MovePosition(Owner.Debug_Target2.position);
 
         Owner.PlayAnimation("ledge-hanging");
+    }
+
+    public override void Tick()
+    {
+        if (Owner.MoveInput.x != 0)
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.LedgeClimbState);
+        }
+    }
+
+    public override void Exit()
+    {
+        Owner.Rb.bodyType = RigidbodyType2D.Dynamic;
     }
 }

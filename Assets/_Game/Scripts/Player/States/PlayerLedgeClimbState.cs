@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 public class PlayerLedgeClimbState : State<Player>
 {
@@ -10,9 +11,17 @@ public class PlayerLedgeClimbState : State<Player>
         Owner.Rb.velocity = Vector2.zero;
         Owner.Rb.bodyType = RigidbodyType2D.Kinematic;
 
-        Owner.Rb.MovePosition(Owner.Debug_Target2.position);
-
+        // Owner.Rb.MovePosition(Owner.Debug_Target.position);
         Owner.PlayAnimation("ledge-climbing");
+        Owner.Rb.DOMoveY(Owner.Rb.position.y + 1.8f, .4f).OnComplete(() =>
+        {
+            Owner.PlayAnimation("Walking");
+
+            Owner.Rb.DOMoveX(Owner.Rb.position.x + 1, .2f).OnComplete(() =>
+            {
+                Owner.MovementStateMachine.ChangeState(Owner.IdleState);
+            });
+        });
     }
 
     public override void FixedTick()
