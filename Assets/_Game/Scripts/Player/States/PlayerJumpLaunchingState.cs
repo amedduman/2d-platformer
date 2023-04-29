@@ -24,6 +24,7 @@ public class PlayerJumpLaunchingState : State<Player>
             return;
         }
 
+        // reset y velocity if jump button pressed to make variable jump height.
         if (Owner.JumpInput == false)
         {
             Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 0);
