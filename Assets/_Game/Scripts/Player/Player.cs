@@ -99,13 +99,15 @@ public class Player : MonoBehaviour
             Rb.velocity = new Vector2(MoveInput.x * MovementSpeed, Rb.velocity.y);
             ChangeBodyRotationAccordingToMovementDirection();
 
-            void ChangeBodyRotationAccordingToMovementDirection()
-            {
-                if (Mathf.Approximately(MoveInput.x, 0)) return; // if there is no input on x axis don't change the rotation
-                float degree = MoveInput.x >= 0 ? 0 : 180;
-                var original = transform.rotation.eulerAngles;
-                transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-            }
+            
+        }
+        
+        public void ChangeBodyRotationAccordingToMovementDirection()
+        {
+            if (Mathf.Approximately(MoveInput.x, 0)) return; // if there is no input on x axis don't change the rotation
+            float degree = MoveInput.x >= 0 ? 0 : 180;
+            var original = transform.rotation.eulerAngles;
+            transform.localEulerAngles = new Vector3(original.x, degree, original.z);
         }
 
         public void PlayAnimation(string stateName)

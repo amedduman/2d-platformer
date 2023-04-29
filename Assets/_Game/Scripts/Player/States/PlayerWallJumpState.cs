@@ -7,27 +7,62 @@ public class PlayerWallJumpState : State<Player>
     public PlayerWallJumpState(Player sm) : base(sm) {
     }
 
-    int dir; // this is the opposite dir to the wall which player is sliding
     public override void Enter()
     {
         Owner.PlayAnimation("jump_start");
-        dir = Owner.transform.rotation.eulerAngles.y == 0 ? -1 : 1;
-        var degree = dir == 1 ? 0 : 180;
+        // int dir; // this is the opposite dir to the wall which player is sliding
+        // dir = Owner.transform.rotation.eulerAngles.y == 0 ? -1 : 1;
+        // var degree = dir == 1 ? 0 : 180;
+        // var original = Owner.transform.rotation.eulerAngles;
+        // Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
+
+        var oppositeDirToWall = GetOppositeDirectionToCurrentWall();
+        ChangeRotationAccordingToVector(oppositeDirToWall);
+        Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 6, 20);
+    }
+
+    Vector2 GetOppositeDirectionToCurrentWall()
+    {
+        if (Physics2D.Raycast(Owner.WallCheckRayOrigin.position, Owner.transform.right, Owner.WallCheckRayLegth, Owner.WallLayer))
+        {
+            return Owner.transform.right * -1;
+        }
+        return Owner.transform.right;
+    }
+
+    void ChangeRotationAccordingToVector(Vector2 vec)
+    {
+        float degree = 0;
         var original = Owner.transform.rotation.eulerAngles;
+        if ((int)vec.x == 1)
+        {
+            degree = 0;
+        }
+        else if ((int)vec.x == -1)
+        {
+            degree = 180;
+        }
+        else
+        {
+            degree = original.y;
+        }
+        
         Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-//        Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 20);
-        Owner.Rb.velocity = new Vector2(dir * 6, 20);
+
     }
 
     public override void FixedTick()
     {
         // allow player to move the dir
-        if ((int)Owner.MoveInput.x == dir || Owner.Rb.velocity.y < 0)
+        // if ((int)Owner.MoveInput.x == dir || Owner.Rb.velocity.y < 0)
+        // {
+        //     Owner.MoveHorizontally();
+        // }
+
+        if (Owner.Rb.velocity.y < 0)
         {
             Owner.MoveHorizontally();
         }
-
-        // Owner.MoveHorizontally();
 
         if (Owner.CheckLedge())
         {
