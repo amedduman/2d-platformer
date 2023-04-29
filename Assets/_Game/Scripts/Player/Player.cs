@@ -37,8 +37,7 @@ public class Player : MonoBehaviour
     public PlayerLedgeHangingState LedgeHangingState { get; private set; }
     public PlayerLeaveWallSlidingState LeaveWallSlidingState { get; private set; }
     public PlayerJumpLaunchingState JumpLaunchingState { get; private set; }
-
-
+    
     InputManager _inputManager;
 
     private void Awake()
@@ -90,140 +89,92 @@ public class Player : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    public void MoveHorizontally()
-    {
-        Rb.velocity = new Vector2(MoveInput.x * MovementSpeed, Rb.velocity.y);
-        ChangeBodyRotataionAccordingToMovementDirection();
+    #region actions
 
-        void ChangeBodyRotataionAccordingToMovementDirection()
+        public void MoveHorizontally()
         {
-            float degree = MoveInput.x >= 0 ? 0 : 180;
-            var original = transform.rotation.eulerAngles;
-            transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-        }
-    }
+            Rb.velocity = new Vector2(MoveInput.x * MovementSpeed, Rb.velocity.y);
+            ChangeBodyRotataionAccordingToMovementDirection();
 
-    public bool IsMovingHorizontally()
-    {
-        return Mathf.Approximately(0, Rb.velocity.magnitude);
-    }
-
-    public void PlayAnimation(string stateName)
-    {
-        MyAnimator.Play(Animator.StringToHash(stateName));
-    }
-
-    public bool CheckGround()
-    {
-        if (Physics2D.OverlapBox(GroundCheckRayOrigin.position,
-            new Vector2(.1f, .1f), 0, JumpableLayers) != null)
-        {
-            return true;
+            void ChangeBodyRotataionAccordingToMovementDirection()
+            {
+                float degree = MoveInput.x >= 0 ? 0 : 180;
+                var original = transform.rotation.eulerAngles;
+                transform.localEulerAngles = new Vector3(original.x, degree, original.z);
+            }
         }
 
-        return false;
-    }
-
-    public bool CheckWall()
-    {
-        if (Physics2D.Raycast(WallCheckRayOrigin.position, transform.right, WallCheckRayLegth, WallLayer))
+        public void PlayAnimation(string stateName)
         {
-            return true;
+            MyAnimator.Play(Animator.StringToHash(stateName));
         }
 
-        return false;
-    }
-    
-    public bool CheckLedge()
-    {
-        if (Physics2D.Raycast(LedgeCheckRayOrigin.position, transform.right, LedgeCheckRayLegth, LedgeLayer))
+    #endregion
+
+    #region checks
+
+        public bool CheckGround()
         {
+            if (Physics2D.OverlapBox(GroundCheckRayOrigin.position,
+                    new Vector2(.1f, .1f), 0, JumpableLayers) != null)
+            {
+                return true;
+            }
+
             return false;
         }
-        else if(CheckWall())
+
+        public bool CheckWall()
         {
-            return true;
+            if (Physics2D.Raycast(WallCheckRayOrigin.position, transform.right, WallCheckRayLegth, WallLayer))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        public bool CheckLedge()
+        {
+            if (Physics2D.Raycast(LedgeCheckRayOrigin.position, transform.right, LedgeCheckRayLegth, LedgeLayer))
+            {
+                return false;
+            }
+            else if(CheckWall())
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        return false;
-    }
+    #endregion
 
-    public bool IsMoveInputParallelWithTransformRight()
-    {
-        int dir = (int)transform.right.x;
-        int input = (int)MoveInput.x;
+    #region conditions
 
-        if (dir == input)
+        public bool IsMoveInputParallelWithTransformRight()
         {
-            return true;
-        }
-        return false;
-    }
+            int dir = (int)transform.right.x;
+            int input = (int)MoveInput.x;
 
-    public bool IsJumpButtonPressed()
-    {
-        if (_previousJumpInput == false && JumpInput == true)
-        {
-            return true;
+            if (dir == input)
+            {
+                return true;
+            }
+            return false;
         }
 
-        return false;
-    }
-    
-    // public void EnterJumpStateIfJumpButtonPressed()
-    // {
-    //     if(_previousJumpInput) return;
-    //     if (JumpInput)
-    //     {
-    //         MovementStateMachine.ChangeState(JumpStartState);
-    //     }
-    // }
-    //
-    // public void EnterFallStateIfNoGroundAndVelocityYisNegative()
-    // {
-    //     if (CheckGround() == false)
-    //     {
-    //         if (Rb.velocity.y < 0)
-    //         {
-    //             MovementStateMachine.ChangeState(FallState);
-    //         }
-    //     }
-    // }
-    //
-    // public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
-    // {
-    //     Debug.Log(Rb.velocity.y);
-    //     if(CheckGround() && Rb.velocity.y <= 0)
-    //     {
-    //         MovementStateMachine.ChangeState(IdleState);
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("can't enter idle state");
-    //     }
-    // }
-    //
-    // public void EnterWallSlideStateIfThereisWallAndVelocityYisNegative()
-    // {
-    //     if (WallCheck())
-    //     {
-    //         if (Rb.velocity.y < 0)
-    //         {
-    //             MovementStateMachine.ChangeState(WallSlideState);
-    //         }
-    //     }
-    // }
-    //
-    // public void EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally()
-    // {
-    //     if (CheckGround())
-    //     {
-    //         if(IsMovingHorizontally())
-    //         {
-    //             MovementStateMachine.ChangeState(MoveState);
-    //         }
-    //     }
-    // }
+        public bool IsJumpButtonPressed()
+        {
+            if (_previousJumpInput == false && JumpInput == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+    #endregion
 
     [SerializeField] bool LogStatesToConsole;
     string _previousState = string.Empty;
