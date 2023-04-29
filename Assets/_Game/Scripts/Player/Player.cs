@@ -25,7 +25,8 @@ public class Player : MonoBehaviour
     public bool _previousJumpInput { get; private set; }
     public bool JumpInput { get; private set; }
     public Rigidbody2D Rb { get; private set; }
-
+    [HideInInspector] public bool CanDoubleJump;
+    
     public StateMachine<Player> MovementStateMachine { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpStartState JumpStartState { get; private set; }
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
     public PlayerLedgeHangingState LedgeHangingState { get; private set; }
     public PlayerLeaveWallSlidingState LeaveWallSlidingState { get; private set; }
     public PlayerJumpLaunchingState JumpLaunchingState { get; private set; }
+    public PlayerDoubleJumpState DoubleJumpState { get; private set; }
     
     InputManager _inputManager;
 
@@ -59,6 +61,7 @@ public class Player : MonoBehaviour
         LedgeHangingState = new PlayerLedgeHangingState(this);
         LeaveWallSlidingState = new PlayerLeaveWallSlidingState(this);
         JumpLaunchingState = new PlayerJumpLaunchingState(this);
+        DoubleJumpState = new PlayerDoubleJumpState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -94,9 +97,9 @@ public class Player : MonoBehaviour
         public void MoveHorizontally()
         {
             Rb.velocity = new Vector2(MoveInput.x * MovementSpeed, Rb.velocity.y);
-            ChangeBodyRotataionAccordingToMovementDirection();
+            ChangeBodyRotationAccordingToMovementDirection();
 
-            void ChangeBodyRotataionAccordingToMovementDirection()
+            void ChangeBodyRotationAccordingToMovementDirection()
             {
                 if (Mathf.Approximately(MoveInput.x, 0)) return; // if there is no input on x axis don't change the rotation
                 float degree = MoveInput.x >= 0 ? 0 : 180;
@@ -109,7 +112,7 @@ public class Player : MonoBehaviour
         {
             MyAnimator.Play(Animator.StringToHash(stateName));
         }
-
+        
     #endregion
 
     #region checks

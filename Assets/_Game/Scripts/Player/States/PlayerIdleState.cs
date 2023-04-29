@@ -10,6 +10,7 @@ public class PlayerIdleState : State<Player>
 
     public override void Enter()
     {
+        Owner.CanDoubleJump = true;
         Owner.PlayAnimation("Idle");
         Owner.Rb.velocity = Vector2.zero;
     }

@@ -10,15 +10,12 @@ public class PlayerJumpStartState : State<Player>
     public override void Enter()
     {
         Owner.PlayAnimation("jump_start");
+        Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 25);
     }
 
     public override void FixedTick()
     {
-        if (Owner.CheckGround())
-        {
-            Owner.Rb.AddForce(new Vector2(0, Owner.JumpSpeed), ForceMode2D.Impulse);       
-        }
-        else
+        if (Owner.CheckGround() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.JumpLaunchingState);
         }

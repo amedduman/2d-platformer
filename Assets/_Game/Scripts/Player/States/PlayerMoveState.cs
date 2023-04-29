@@ -10,6 +10,7 @@ public class PlayerMoveState : State<Player>
 
     public override void Enter()
     {
+        Owner.CanDoubleJump = true;
         Owner.MyAnimator.Play("Walking");
     }
 

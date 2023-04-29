@@ -10,14 +10,20 @@ public class PlayerFallState : State<Player>
         Owner.PlayAnimation("falling");
     }
 
+    public override void Tick()
+    {
+        if (Owner.IsJumpButtonPressed() && Owner.CanDoubleJump)
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.DoubleJumpState);
+            return;
+        }
+    }
+
     public override void FixedTick()
     {
         // limit the y velocity when falling
         if (Owner.Rb.velocity.y < -25)
             Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -25);
-        
-        // if(Owner.MoveInput.x != 0 || Owner.MoveInput.y != 0) // because it will change the rotation of the player is facing
-        //     Owner.MoveHorizontally();
         
         Owner.MoveHorizontally();
         
@@ -38,15 +44,7 @@ public class PlayerFallState : State<Player>
             if (Owner.IsMoveInputParallelWithTransformRight())
             {
                 Owner.MovementStateMachine.ChangeState(Owner.WallSlideState);
-                // if (Owner.Rb.velocity.y < 0)
-                // {
-                //     
-                // }
             }
-            // if (Owner.MoveInput.magnitude != 0)
-            // {
-            //     
-            // }
         }
     }
 }

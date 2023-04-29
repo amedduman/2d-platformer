@@ -14020,6 +14020,7 @@ MonoBehaviour:
   <LedgeLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
+  CanDoubleJump: 0
   LogStatesToConsole: 0
 --- !u!114 &2075003922
 MonoBehaviour:
