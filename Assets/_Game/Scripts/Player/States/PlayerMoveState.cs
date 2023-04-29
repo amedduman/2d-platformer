@@ -15,9 +15,19 @@ public class PlayerMoveState : State<Player>
 
     public override void Tick()
     {
-        Owner.EnterJumpStateIfJumpButtonPressed();
-        Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
-
+        // Owner.EnterJumpStateIfJumpButtonPressed();
+        if (Owner.IsJumpButtonPressed())
+        {
+            Owner.MovementStateMachine.ChangeState(Owner.JumpStartState);
+        }
+        // Owner.EnterFallStateIfNoGroundAndVelocityYisNegative();
+        if (Owner.CheckGround() == false)
+        {
+            if (Owner.Rb.velocity.y < 0)
+            {
+                Owner.MovementStateMachine.ChangeState(Owner.FallState);
+            }
+        }
         if(Mathf.Approximately(0, Owner.MoveInput.x))
         {
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);

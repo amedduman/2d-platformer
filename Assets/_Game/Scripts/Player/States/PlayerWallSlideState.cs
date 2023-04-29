@@ -39,12 +39,12 @@ public class PlayerWallSlideState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
             return;
         } 
-        if(Owner.WallCheck() == false)
+        if(Owner.CheckWall() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
             return;
         }
-        if (Owner.WallCheck() && Owner.JumpInput)
+        if (Owner.CheckWall() && Owner.JumpInput)
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
             return;

@@ -14002,11 +14002,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc006223225943f3931dcec1066a87a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Debug_Target: {fileID: 1566524205}
-  Debug_Target2: {fileID: 829239853}
   <MyAnimator>k__BackingField: {fileID: 1827500550}
   <MovementSpeed>k__BackingField: 10
-  <JumpSpeed>k__BackingField: 12
+  <JumpSpeed>k__BackingField: 25
   <JumpableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64

@@ -33,7 +33,7 @@ public class PlayerWallJumpState : State<Player>
             return;
         }
 
-        if(Owner.WallCheck())
+        if(Owner.CheckWall())
         {
             Owner.MovementStateMachine.ChangeState( Owner.WallSlideState);
             return;
@@ -44,7 +44,7 @@ public class PlayerWallJumpState : State<Player>
             return;
         }
         
-        if (Owner.WallCheck() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
+        if (Owner.CheckWall() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
         {
 //            Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }

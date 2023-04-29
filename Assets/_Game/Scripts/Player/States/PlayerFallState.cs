@@ -27,7 +27,7 @@ public class PlayerFallState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
         }
         
-        if (Owner.WallCheck())
+        if (Owner.CheckWall())
         {
             if (Owner.MoveInput.magnitude != 0)
             {

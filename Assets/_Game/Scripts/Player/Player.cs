@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour
 {
-	public Transform Debug_Target;
-	public Transform  Debug_Target2;
     [field: SerializeField] public Animator MyAnimator { get; private set; }
 
     [field: SerializeField] public float MovementSpeed { get; private set; } = 16;
@@ -17,7 +15,6 @@ public class Player : MonoBehaviour
     [field: SerializeField] public Transform WallCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform LedgeCheckRayOrigin { get; private set; }
     [field: SerializeField] public Transform LedgeHeightRayCheckOrigin { get; private set; }
-    
 
     [field: SerializeField] public float WallCheckRayLegth { get; private set; } = 1;
     [field: SerializeField] public float LedgeCheckRayLegth { get; private set; } = 1;
@@ -29,16 +26,17 @@ public class Player : MonoBehaviour
     public bool JumpInput { get; private set; }
     public Rigidbody2D Rb { get; private set; }
 
-    public StateMachine<Player> MovementStateMachine;
-    public PlayerMoveState MoveState;
-    public PlayerJumpState JumpState;
-    public PlayerIdleState IdleState;
-    public PlayerWallSlideState WallSlideState;
+    public StateMachine<Player> MovementStateMachine { get; private set; }
+    public PlayerMoveState MoveState { get; private set; }
+    public PlayerJumpStartState JumpStartState { get; private set; }
+    public PlayerIdleState IdleState { get; private set; }
+    public PlayerWallSlideState WallSlideState { get; private set; }
     public PlayerFallState FallState { get; private set; }
     public PlayerWallJumpState WallJumpState { get; private set; }
     public PlayerLedgeClimbState LedgeClimbState { get; private set; }
     public PlayerLedgeHangingState LedgeHangingState { get; private set; }
     public PlayerLeaveWallSlidingState LeaveWallSlidingState { get; private set; }
+    public PlayerJumpLaunchingState JumpLaunchingState { get; private set; }
 
 
     InputManager _inputManager;
@@ -53,14 +51,15 @@ public class Player : MonoBehaviour
     {
         MovementStateMachine = new StateMachine<Player>();
         MoveState = new PlayerMoveState(this);
-        JumpState = new PlayerJumpState(this);
+        JumpStartState = new PlayerJumpStartState(this);
         IdleState = new PlayerIdleState(this);
         WallSlideState = new PlayerWallSlideState(this);
         FallState = new PlayerFallState(this);
         WallJumpState = new PlayerWallJumpState(this);
         LedgeClimbState = new PlayerLedgeClimbState(this);
         LedgeHangingState = new PlayerLedgeHangingState(this);
-        LeaveWallSlidingState = new PlayerLeaveWallSlidingState(this); 
+        LeaveWallSlidingState = new PlayerLeaveWallSlidingState(this);
+        JumpLaunchingState = new PlayerJumpLaunchingState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -81,6 +80,14 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(WallCheckRayOrigin.position, WallCheckRayOrigin.position + transform.right * WallCheckRayLegth);
 
         Gizmos.DrawLine(LedgeCheckRayOrigin.position, LedgeCheckRayOrigin.position + transform.right * LedgeCheckRayLegth);
+    }
+    
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10f, 10f, 600f, 100f));
+        string content = MovementStateMachine.CurrentState != null ? MovementStateMachine.CurrentState.ToString() : "(no current state)";
+        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
+        GUILayout.EndArea();
     }
 
     public void MoveHorizontally()
@@ -117,7 +124,7 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    public bool WallCheck()
+    public bool CheckWall()
     {
         if (Physics2D.Raycast(WallCheckRayOrigin.position, transform.right, WallCheckRayLegth, WallLayer))
         {
@@ -126,10 +133,19 @@ public class Player : MonoBehaviour
 
         return false;
     }
-
-    public bool IsVelocityOnYAxisisNegative()
+    
+    public bool CheckLedge()
     {
-        return Rb.velocity.y < 0;
+        if (Physics2D.Raycast(LedgeCheckRayOrigin.position, transform.right, LedgeCheckRayLegth, LedgeLayer))
+        {
+            return false;
+        }
+        else if(CheckWall())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public bool IsMoveInputParallelWithTransformRight()
@@ -144,93 +160,73 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    public void Jump()
+    public bool IsJumpButtonPressed()
     {
-//        Rb.velocity = new Vector2(Rb.velocity.x, JumpSpeed);
-        var force = new Vector2(0, JumpSpeed);
-        Rb.AddForce(force, ForceMode2D.Impulse);
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(10f, 10f, 600f, 100f));
-        string content = MovementStateMachine.CurrentState != null ? MovementStateMachine.CurrentState.ToString() : "(no current state)";
-        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
-        GUILayout.EndArea();
-    }
-
-    public void EnterJumpStateIfJumpButtonPressed()
-    {
-        if(_previousJumpInput) return;
-        if (JumpInput)
-        {
-            MovementStateMachine.ChangeState(JumpState);
-        }
-    }
-
-    public void EnterFallStateIfNoGroundAndVelocityYisNegative()
-    {
-        if (CheckGround() == false)
-        {
-            if (Rb.velocity.y < 0)
-            {
-                MovementStateMachine.ChangeState(FallState);
-            }
-        }
-    }
-
-    public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
-    {
-        Debug.Log(Rb.velocity.y);
-        if(CheckGround() && Rb.velocity.y <= 0)
-        {
-            MovementStateMachine.ChangeState(IdleState);
-        }
-        else
-        {
-            Debug.Log("can't enter idle state");
-        }
-    }
-
-    public void EnterWallSlideStateIfThereisWallAndVelocityYisNegative()
-    {
-        if (WallCheck())
-        {
-            if (Rb.velocity.y < 0)
-            {
-                MovementStateMachine.ChangeState(WallSlideState);
-            }
-        }
-    }
-
-    public void EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally()
-    {
-        if (CheckGround())
-        {
-            if(IsMovingHorizontally())
-            {
-                MovementStateMachine.ChangeState(MoveState);
-            }
-        }
-    }
-
-    public bool CheckLedge()
-    {
-        if (Physics2D.Raycast(LedgeCheckRayOrigin.position, transform.right, LedgeCheckRayLegth, LedgeLayer))
-        {
-            return false;
-        }
-        else if(WallCheck())
+        if (_previousJumpInput == false && JumpInput == true)
         {
             return true;
         }
 
         return false;
     }
+    
+    // public void EnterJumpStateIfJumpButtonPressed()
+    // {
+    //     if(_previousJumpInput) return;
+    //     if (JumpInput)
+    //     {
+    //         MovementStateMachine.ChangeState(JumpStartState);
+    //     }
+    // }
+    //
+    // public void EnterFallStateIfNoGroundAndVelocityYisNegative()
+    // {
+    //     if (CheckGround() == false)
+    //     {
+    //         if (Rb.velocity.y < 0)
+    //         {
+    //             MovementStateMachine.ChangeState(FallState);
+    //         }
+    //     }
+    // }
+    //
+    // public void EnterIdleStateIfThereIsGroundAndVelocityYisNegative()
+    // {
+    //     Debug.Log(Rb.velocity.y);
+    //     if(CheckGround() && Rb.velocity.y <= 0)
+    //     {
+    //         MovementStateMachine.ChangeState(IdleState);
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("can't enter idle state");
+    //     }
+    // }
+    //
+    // public void EnterWallSlideStateIfThereisWallAndVelocityYisNegative()
+    // {
+    //     if (WallCheck())
+    //     {
+    //         if (Rb.velocity.y < 0)
+    //         {
+    //             MovementStateMachine.ChangeState(WallSlideState);
+    //         }
+    //     }
+    // }
+    //
+    // public void EnterMoveStateIfThereIsGroundAndPlayerIsMovingHorizontally()
+    // {
+    //     if (CheckGround())
+    //     {
+    //         if(IsMovingHorizontally())
+    //         {
+    //             MovementStateMachine.ChangeState(MoveState);
+    //         }
+    //     }
+    // }
 
     [SerializeField] bool LogStatesToConsole;
     string _previousState = string.Empty;
-
     private void LogStates()
     {
         if(LogStatesToConsole == false) return;
