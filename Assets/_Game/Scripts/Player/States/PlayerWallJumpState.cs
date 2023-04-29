@@ -26,7 +26,9 @@ public class PlayerWallJumpState : State<Player>
         {
             Owner.MoveHorizontally();
         }
-        
+
+        // Owner.MoveHorizontally();
+
         if (Owner.CheckLedge())
         {
             Owner.MovementStateMachine.ChangeState(Owner.LedgeHangingState);
@@ -43,12 +45,5 @@ public class PlayerWallJumpState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
             return;
         }
-        
-        if (Owner.CheckWall() == false && Owner.CheckGround() == false && Owner.Rb.velocity.y < 0)
-        {
-//            Owner.MovementStateMachine.ChangeState(Owner.FallState);
-        }
-
-//        Owner.MoveHorizontally();
     }
 }

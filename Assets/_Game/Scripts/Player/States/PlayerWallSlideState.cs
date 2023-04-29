@@ -10,28 +10,16 @@ public class PlayerWallSlideState : State<Player>
 
     public override void Enter()
     {
-        Owner.CanDoubleJump = true;
-        // Debug.Log("entered from " + Owner.MovementStateMachine.PreviousState);
+        // Owner.CanDoubleJump = true;
         Owner.PlayAnimation("wall_sliding");
     }
 
     public override void Tick()
     {
+        // since the wall is on the transform right. we force players to hold on opposite input to make character slide
         if (Owner.IsMoveInputParallelWithTransformRight() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.LeaveWallSlidingState);
-            // if (Owner.transform.rotation.eulerAngles.y == 180)
-            // {
-            //     var original = Owner.transform.rotation.eulerAngles;
-            //     Owner.transform.eulerAngles = new Vector3(original.x, 0, original.z);
-            // }
-            // else
-            // {
-            //     var original = Owner.transform.rotation.eulerAngles;
-            //     Owner.transform.eulerAngles = new Vector3(original.x, 180, original.z);
-            // }
-            // Owner.MovementStateMachine.ChangeState(Owner.FallState);
-
             return;
         }
         
@@ -40,12 +28,14 @@ public class PlayerWallSlideState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.IdleState);
             return;
         } 
+        
         if(Owner.CheckWall() == false)
         {
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
             return;
         }
-        if (Owner.CheckWall() && Owner.JumpInput)
+        
+        if (/*Owner.CheckWall() &&*/ Owner.IsJumpButtonPressed())
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
             return;

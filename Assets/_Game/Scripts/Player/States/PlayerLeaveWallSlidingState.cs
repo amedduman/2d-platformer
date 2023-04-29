@@ -29,7 +29,7 @@ public class PlayerLeaveWallSlidingState : State<Player>
             return;
         }
 
-        if (Owner.JumpInput)
+        if (Owner.IsJumpButtonPressed())
         {
             Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
         }
