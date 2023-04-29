@@ -10,17 +10,13 @@ public class PlayerWallJumpState : State<Player>
     public override void Enter()
     {
         Owner.PlayAnimation("jump_start");
-        // int dir; // this is the opposite dir to the wall which player is sliding
-        // dir = Owner.transform.rotation.eulerAngles.y == 0 ? -1 : 1;
-        // var degree = dir == 1 ? 0 : 180;
-        // var original = Owner.transform.rotation.eulerAngles;
-        // Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-
+        
+        // make player jump and face opposite direction to wall.
         var oppositeDirToWall = GetOppositeDirectionToCurrentWall();
         ChangeRotationAccordingToVector(oppositeDirToWall);
         Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 6, 20);
     }
-
+    
     Vector2 GetOppositeDirectionToCurrentWall()
     {
         if (Physics2D.Raycast(Owner.WallCheckRayOrigin.position, Owner.transform.right, Owner.WallCheckRayLegth, Owner.WallLayer))
@@ -53,12 +49,6 @@ public class PlayerWallJumpState : State<Player>
 
     public override void FixedTick()
     {
-        // allow player to move the dir
-        // if ((int)Owner.MoveInput.x == dir || Owner.Rb.velocity.y < 0)
-        // {
-        //     Owner.MoveHorizontally();
-        // }
-
         if (Owner.Rb.velocity.y < 0)
         {
             Owner.MoveHorizontally();
