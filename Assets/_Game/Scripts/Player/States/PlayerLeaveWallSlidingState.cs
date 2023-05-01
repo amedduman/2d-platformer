@@ -13,7 +13,11 @@ public class PlayerLeaveWallSlidingState : State<Player>
 
     public override void Enter()
     {
+        Owner.PlayAnimation("falling");
+        
         _currentTime = 0; // reset current time
+        
+        // make player jump and face opposite direction to wall.
         var oppositeDirToWall = Owner.GetOppositeDirectionToCurrentWall();
         Owner.ChangeRotationAccordingToVector(oppositeDirToWall);
         Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 2, 2);
