@@ -21,9 +21,13 @@ public class PlayerFallState : State<Player>
 
     public override void FixedTick()
     {
-        // limit the y velocity when falling
-        if (Owner.Rb.velocity.y < -25)
-            Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -25);
+        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, Physics.gravity.y * 400 * Time.deltaTime);
+        //
+        // // limit the y velocity when falling
+        // if (Owner.Rb.velocity.y < -25)
+        //     Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -25);
+        
+        Owner.Fall();
         
         Owner.MoveHorizontally();
         

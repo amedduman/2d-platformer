@@ -8,7 +8,7 @@ public class PlayerLeaveWallSlidingState : State<Player>
     public PlayerLeaveWallSlidingState(Player owner) : base(owner) {
     }
 
-    float _wallJumpTime = .5f;
+    float _wallJumpTime = .2f;
     float _currentTime = 0;
 
     public override void Enter()
@@ -44,22 +44,17 @@ public class PlayerLeaveWallSlidingState : State<Player>
         }
         
         _currentTime += Time.deltaTime;
+        
     }
 
-    void LeaveWall()
+    public override void FixedTick()
     {
-        if (Math.Abs(Owner.transform.rotation.eulerAngles.y - 180) < 1)
-        {
-            var original = Owner.transform.rotation.eulerAngles;
-            Owner.transform.eulerAngles = new Vector3(original.x, 0, original.z);
-            Owner.Rb.velocity = new Vector2(Owner.transform.right.x * -2, Owner.Rb.velocity.y);
-        }
-        else
-        {
-            var original = Owner.transform.rotation.eulerAngles;
-            Owner.transform.eulerAngles = new Vector3(original.x, 180, original.z);
-            Owner.Rb.velocity = new Vector2(Owner.transform.right.x * 2, Owner.Rb.velocity.y);
-        }
-        Owner.MovementStateMachine.ChangeState(Owner.FallState);
+        Owner.Fall();
+
+        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, Physics.gravity.y * 20 * Time.deltaTime);
+        // float minY = 0;
+        // minY = Mathf.Clamp(minY, -25, -10);
+        // // limit the y velocity when falling
+        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, minY);
     }
 }

@@ -142,8 +142,17 @@ public class Player : MonoBehaviour
             transform.localEulerAngles = new Vector3(original.x, degree, original.z);
 
         }
-        
-    #endregion
+
+        public void Fall()
+        {
+            Rb.velocity = new Vector2(Rb.velocity.x, Physics.gravity.y * 20 * Time.deltaTime);
+            float minY = 0;
+            minY = Mathf.Clamp(minY, -25, -10);
+            // limit the y velocity when falling
+            Rb.velocity = new Vector2(Rb.velocity.x, minY);
+        }
+
+        #endregion
 
     #region checks
 
