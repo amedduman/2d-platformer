@@ -112,6 +112,36 @@ public class Player : MonoBehaviour
         {
             MyAnimator.Play(Animator.StringToHash(stateName));
         }
+
+        public Vector2 GetOppositeDirectionToCurrentWall()
+        {
+            if (Physics2D.Raycast(WallCheckRayOrigin.position, transform.right, WallCheckRayLegth, WallLayer))
+            {
+                return transform.right * -1;
+            }
+            return transform.right;
+        }
+
+        public void ChangeRotationAccordingToVector(Vector2 vec)
+        {
+            float degree = 0;
+            var original = transform.rotation.eulerAngles;
+            if ((int)vec.x == 1)
+            {
+                degree = 0;
+            }
+            else if ((int)vec.x == -1)
+            {
+                degree = 180;
+            }
+            else
+            {
+                degree = original.y;
+            }
+        
+            transform.localEulerAngles = new Vector3(original.x, degree, original.z);
+
+        }
         
     #endregion
 

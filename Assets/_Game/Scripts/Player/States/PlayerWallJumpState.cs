@@ -12,39 +12,9 @@ public class PlayerWallJumpState : State<Player>
         Owner.PlayAnimation("jump_start");
         
         // make player jump and face opposite direction to wall.
-        var oppositeDirToWall = GetOppositeDirectionToCurrentWall();
-        ChangeRotationAccordingToVector(oppositeDirToWall);
+        var oppositeDirToWall = Owner.GetOppositeDirectionToCurrentWall();
+        Owner.ChangeRotationAccordingToVector(oppositeDirToWall);
         Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 6, 20);
-    }
-    
-    Vector2 GetOppositeDirectionToCurrentWall()
-    {
-        if (Physics2D.Raycast(Owner.WallCheckRayOrigin.position, Owner.transform.right, Owner.WallCheckRayLegth, Owner.WallLayer))
-        {
-            return Owner.transform.right * -1;
-        }
-        return Owner.transform.right;
-    }
-
-    void ChangeRotationAccordingToVector(Vector2 vec)
-    {
-        float degree = 0;
-        var original = Owner.transform.rotation.eulerAngles;
-        if ((int)vec.x == 1)
-        {
-            degree = 0;
-        }
-        else if ((int)vec.x == -1)
-        {
-            degree = 180;
-        }
-        else
-        {
-            degree = original.y;
-        }
-        
-        Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-
     }
 
     public override void FixedTick()

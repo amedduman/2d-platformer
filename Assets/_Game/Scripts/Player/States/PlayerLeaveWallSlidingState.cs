@@ -14,41 +14,11 @@ public class PlayerLeaveWallSlidingState : State<Player>
     public override void Enter()
     {
         _currentTime = 0; // reset current time
-        var oppositeDirToWall = GetOppositeDirectionToCurrentWall();
-        ChangeRotationAccordingToVector(oppositeDirToWall);
+        var oppositeDirToWall = Owner.GetOppositeDirectionToCurrentWall();
+        Owner.ChangeRotationAccordingToVector(oppositeDirToWall);
         Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 2, 2);
     }
     
-    Vector2 GetOppositeDirectionToCurrentWall()
-    {
-        if (Physics2D.Raycast(Owner.WallCheckRayOrigin.position, Owner.transform.right, Owner.WallCheckRayLegth, Owner.WallLayer))
-        {
-            return Owner.transform.right * -1;
-        }
-        return Owner.transform.right;
-    }
-
-    void ChangeRotationAccordingToVector(Vector2 vec)
-    {
-        float degree = 0;
-        var original = Owner.transform.rotation.eulerAngles;
-        if ((int)vec.x == 1)
-        {
-            degree = 0;
-        }
-        else if ((int)vec.x == -1)
-        {
-            degree = 180;
-        }
-        else
-        {
-            degree = original.y;
-        }
-        
-        Owner.transform.localEulerAngles = new Vector3(original.x, degree, original.z);
-
-    }
-
     public override void Tick()
     {
         if (Owner.CheckGround())
@@ -69,17 +39,6 @@ public class PlayerLeaveWallSlidingState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.FallState);
         }
         
-        // if (_currentTime > _wallJumpTime)
-        // {
-        //     LeaveWall();
-        //     return;
-        // }
-        //
-        // if (Owner.IsJumpButtonPressed())
-        // {
-        //     Owner.MovementStateMachine.ChangeState(Owner.WallJumpState);
-        // }
-
         _currentTime += Time.deltaTime;
     }
 
