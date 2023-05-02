@@ -44,17 +44,10 @@ public class PlayerLeaveWallSlidingState : State<Player>
         }
         
         _currentTime += Time.deltaTime;
-        
     }
 
     public override void FixedTick()
     {
-        Owner.Fall();
-
-        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, Physics.gravity.y * 20 * Time.deltaTime);
-        // float minY = 0;
-        // minY = Mathf.Clamp(minY, -25, -10);
-        // // limit the y velocity when falling
-        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, minY);
+        Owner.Fall(20);
     }
 }

@@ -5,8 +5,11 @@ public class PlayerFallState : State<Player>
     public PlayerFallState(Player sm) : base(sm) {
     }
 
+    float _inAirTimer = 1;
+    
     public override void Enter()
     {
+        _inAirTimer = 1;
         Owner.PlayAnimation("falling");
     }
 
@@ -17,17 +20,13 @@ public class PlayerFallState : State<Player>
             Owner.MovementStateMachine.ChangeState(Owner.DoubleJumpState);
             return;
         }
+
+        _inAirTimer += Time.deltaTime;
     }
 
     public override void FixedTick()
     {
-        // Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, Physics.gravity.y * 400 * Time.deltaTime);
-        //
-        // // limit the y velocity when falling
-        // if (Owner.Rb.velocity.y < -25)
-        //     Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, -25);
-        
-        Owner.Fall();
+        Owner.Fall(100 * _inAirTimer);
         
         Owner.MoveHorizontally();
         

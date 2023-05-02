@@ -7,6 +7,7 @@ public class PlayerDoubleJumpState : State<Player>
 
     public override void Enter()
     {
+        Owner.PlayAnimation("double_jump");
         Owner.CanDoubleJump = false;
         Owner.Rb.velocity = new Vector2(Owner.Rb.velocity.x, 25);
     }

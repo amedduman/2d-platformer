@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     public PlayerLeaveWallSlidingState LeaveWallSlidingState { get; private set; }
     public PlayerJumpLaunchingState JumpLaunchingState { get; private set; }
     public PlayerDoubleJumpState DoubleJumpState { get; private set; }
+    public PlayerJumpPeakPauseState JumpPeakState { get; private set; }
     
     InputManager _inputManager;
 
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
         LeaveWallSlidingState = new PlayerLeaveWallSlidingState(this);
         JumpLaunchingState = new PlayerJumpLaunchingState(this);
         DoubleJumpState = new PlayerDoubleJumpState(this);
+        JumpPeakState = new PlayerJumpPeakPauseState(this);
 
         MovementStateMachine.ChangeState(IdleState);
     }
@@ -143,11 +145,10 @@ public class Player : MonoBehaviour
 
         }
 
-        public void Fall()
+        public void Fall(float gravityMultiplier)
         {
-            Rb.velocity = new Vector2(Rb.velocity.x, Physics.gravity.y * 20 * Time.deltaTime);
-            float minY = 0;
-            minY = Mathf.Clamp(minY, -25, -10);
+            float minY = Physics.gravity.y * gravityMultiplier * Time.deltaTime;
+            minY = Mathf.Clamp(minY, -50, -10);
             // limit the y velocity when falling
             Rb.velocity = new Vector2(Rb.velocity.x, minY);
         }

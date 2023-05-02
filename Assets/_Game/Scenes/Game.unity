@@ -13942,7 +13942,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MyAnimator>k__BackingField: {fileID: 1827500550}
   <MovementSpeed>k__BackingField: 10
-  <JumpSpeed>k__BackingField: 25
+  <JumpSpeed>k__BackingField: 17
   <JumpableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64

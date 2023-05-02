@@ -14,7 +14,7 @@ public class PlayerWallJumpState : State<Player>
         // make player jump and face opposite direction to wall.
         var oppositeDirToWall = Owner.GetOppositeDirectionToCurrentWall();
         Owner.ChangeRotationAccordingToVector(oppositeDirToWall);
-        Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 6, 20);
+        Owner.Rb.velocity = new Vector2(oppositeDirToWall.x * 6, 24);
     }
 
     public override void FixedTick()
